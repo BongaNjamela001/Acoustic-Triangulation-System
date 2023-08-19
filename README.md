@@ -7,7 +7,6 @@ Collaborative work to design and develop an acoustic triangulation system using 
 - [Documents](https://github.com/BongaNjamela001/Acoustic-Triangulation-System/tree/main/DOC)
 - [Firmware](https://github.com/BongaNjamela001/Acoustic-Triangulation-System/tree/main/FRM)
 - [Simulation](https://github.com/BongaNjamela001/Acoustic-Triangulation-System/tree/main/SIM)
-- [Contributors](#contributors)
 - [License](#LICENSE)
 ## License
 This project is licensed under the [MIT License](LICENSE).
