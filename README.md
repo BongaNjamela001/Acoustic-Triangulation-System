@@ -3,7 +3,7 @@ Welcome to the GitHub repository for the Acoustic Triangulation System project! 
 ## Project Overview
 Collaborative work to design and develop an acoustic triangulation system using two Raspberry Pi Zero's and 4 MEMS microphones. The system calculates two-dimensional coordinates of the sound source within the grid and displays the results through a graphical user interface.
 ## Table of Contents
-- [background](#BKG)
+- [Background](#BKG)
 - [Documents](#DOC)
 - [Firmware](#FRM)
 - [Simulation](#SIM)
