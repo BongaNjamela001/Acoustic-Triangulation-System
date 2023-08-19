@@ -5,7 +5,7 @@ Collaborative work to design and develop an acoustic triangulation system using 
 ## Table of Contents
 - [Background](https://github.com/BongaNjamela001/Acoustic-Triangulation-System/tree/main/BKG)
 - [Documents](https://github.com/BongaNjamela001/Acoustic-Triangulation-System/tree/main/DOC)
-* [Firmware](https://github.com/BongaNjamela001/Acoustic-Triangulation-System/tree/main/FRM)
+- [Firmware](https://github.com/BongaNjamela001/Acoustic-Triangulation-System/tree/main/FRM)
 - [Simulation](https://github.com/BongaNjamela001/Acoustic-Triangulation-System/tree/main/SIM)
 - [Contributors](#contributors)
 - [License](#LICENSE)
