@@ -5,7 +5,7 @@ Collaborative work to design and develop an acoustic triangulation system using 
 ## Table of Contents
 - [Background](#BKG)
 - [Documents](#DOC)
-- [Firmware](#FRM)
+- [Firmware]([https://gitlab.com/morrisafrikao/ambient-light-sensor/-/tree/main/CAD](https://github.com/BongaNjamela001/Acoustic-Triangulation-System/tree/main/FRM)(#FRM)
 - [Simulation](#SIM)
 - [Contributors](#contributors)
 - [License](#LICENSE)
