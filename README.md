@@ -8,4 +8,4 @@ Collaborative work to design and develop an acoustic triangulation system using 
 - [Firmware](#FRM)
 - [Simulation](#SIM)
 - [Contributors](#contributors)
-
+- [License](#license)
