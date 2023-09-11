@@ -24,9 +24,11 @@ def interface_with_triangulation(time_delay_measurement):
 
 # Main function
 if __name__ == "__main__":
-    # Simulated audio data for two microphones (replace with your actual audio data)
+    # Simulated audio data for 4 microphones (replace with your actual audio data)
     audio_signal1 = np.array([...])
     audio_signal2 = np.array([...])
+    audio_signal3 = np.array([...])
+    audio_signal4 = np.array([...])
 
     # Sampling above Nyquist rate for audio signals (0-20kHz)
     sampling_rate = 44100  # Example: 44.1 kHz
