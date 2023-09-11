@@ -28,7 +28,7 @@ if __name__ == "__main__":
     audio_signal1 = np.array([...])
     audio_signal2 = np.array([...])
 
-    # Sampling above Nyquist rate for audio signals (0-20kHz)
+    # Sampling rate (replace with your actual sampling rate)
     sampling_rate = 44100  # Example: 44.1 kHz
 
     # Calculate TDoA between audio signals
