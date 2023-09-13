@@ -8,5 +8,5 @@ function parameters = computeGetGlobalParameters()
 
 parameters.EmissionSpeed = 350;
 % parameters.EmissionSpeed = 299792458.0;
-parameters.TimeScale  = 50;
+parameters.TimeScale  = 1e3;
 end
