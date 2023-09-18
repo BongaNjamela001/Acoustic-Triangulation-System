@@ -279,8 +279,8 @@ optimum_time_delays = process_microphone_signals(microphone_signals)
 estimated_sound_source_position = triangulate_sound_source(optimum_time_delays, microphone_positions, speed_of_sound)
 
 # # Output the estimated sound source location
-print("=========================Simulation Resul===t=======================")
-print(f"Estimated Sound Source Location: X = {estimated_sound_source_position[0]:.3f} meters, "
-      f"Y = {estimated_sound_source_position[1]:.3f} meters, "
+print("=========================Simulation Result==========================")
+print(f"Estimated Sound Source Location:\n X = {estimated_sound_source_position[0]:.3f} meters,\n "
+      f"Y = {estimated_sound_source_position[1]:.3f} meters,\n "
       f"Z = {estimated_sound_source_position[2]:.3f} meters")
 print("====================================================================\n")
