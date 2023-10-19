@@ -30,7 +30,7 @@ m4 = []
 microphone_positions = np.array([[], [], [], []])
 temperature = 25  # Default temperature in Celsius
 speed_of_sound = 331.4 * np.sqrt(1 + (temperature / 273.15))
-source_coord = [20,20,20]
+source_coord = [1,1,1]
 source_position = np.array(source_coord)  # Default position (1m above origin)
 default = ""
 
@@ -214,140 +214,100 @@ for i, correlation in enumerate(correlations):
 
 plt.show()
 
-def gcc_phat(signal1, signal2):
-    fft_signal1 = np.fft.fft(signal1)
-    fft_signal2 = np.fft.fft(signal2)
-    cross_correlation = fft_signal1 * np.conj(fft_signal2)
-    cross_correlation /= np.abs(cross_correlation)
-    inverse_correlation = np.fft.ifft(cross_correlation)
-    gcc_phat_result = np.abs(inverse_correlation)
-    return gcc_phat_result
+# time_delays = []
 
-gcc_phat_result = gcc_phat(microphone_signals[0], microphone_signals[1])
-
-# Find the time delay corresponding to the peak
-peak_index = np.argmax(gcc_phat_result)
-estimated_delay = t[peak_index]
-
-# Plot the GCC-PHAT result
-plt.figure(figsize=(8, 4))
-plt.plot(t, gcc_phat_result)
-plt.xlabel("Time Delay (s)")
-plt.ylabel("GCC-PHAT Value")
-plt.title("GCC-PHAT Cross-Correlation")
-plt.grid(True)
-plt.show()
-
-print("Estimated Time Delay:", estimated_delay, "seconds")
-
-time_delays = []
-
-
-def gcc_phat(signal_1, signal_2, sample_rate):
-    # Compute the cross-correlation with phase transform (GCC-PHAT)
-    cross_correlation = signal.correlate(signal_1, signal_2, mode='full', method='fft')
+# def gcc_phat(signal_1, signal_2, sample_rate):
+#     # Compute the cross-correlation with phase transform (GCC-PHAT)
+#     cross_correlation = signal.correlate(signal_1, signal_2, mode='full', method='fft')
     
-    # Compute the phase transform
-    phase_transform = np.angle(np.fft.fftshift(np.fft.fft(cross_correlation)))
+#     # Compute the phase transform
+#     phase_transform = np.angle(np.fft.fftshift(np.fft.fft(cross_correlation)))
     
-    # Calculate time delay estimation (in samples)
-    max_index = np.argmax(phase_transform)
-    time_delay_samples = max_index - len(signal_1) + 1
+#     # Calculate time delay estimation (in samples)
+#     max_index = np.argmax(phase_transform)
+#     time_delay_samples = max_index - len(signal_1) + 1
     
-    # Calculate time delay in seconds
-    time_delay_seconds = time_delay_samples / sample_rate
+#     # Calculate time delay in seconds
+#     time_delay_seconds = time_delay_samples / sample_rate
     
-    return time_delay_seconds
-
-
-time_delays = []
+#     return time_delay_seconds
 
 # Calculate time delays for each microphone pair
-for i in range(len(microphone_positions) - 1):
-    for j in range(i + 1, len(microphone_positions)):
-        microphone_1_signal = microphone_signals[i]  
-        microphone_2_signal = microphone_signals[j] 
+# for i in range(len(microphone_positions) - 1):
+#     for j in range(i + 1, len(microphone_positions)):
+#         microphone_1_signal = microphone_signals[i]  
+#         microphone_2_signal = microphone_signals[j] 
         
-        # Calculate the time delay between microphone pairs
-        time_delay = gcc_phat(microphone_1_signal, microphone_2_signal, sample_rate)
-        time_delays.append((i, j, time_delay))
-
-
-# for mic1, mic2, time_delay in time_delays:
-    
-#     # Calculate the distance between microphone pairs
-#     distance = np.linalg.norm(microphone_positions[mic1] - microphone_positions[mic2])
-#     # Calculate the angle of arrival using the speed of sound and time delay
-#     angle_of_arrival = np.arctan2(distance, speed_of_sound * time_delay)
-    
-#     angles_of_arrival.append(angle_of_arrival)
-
-def process_microphone_signals(microphone_signals):
-    # Split the microphone signals into pairs (m1-m2 and m3-m4)
-    m1_m2_signals = microphone_signals[0:2]
-    m3_m4_signals = microphone_signals[2:4]
-    m1_m4_signals = [microphone_signals[0], microphone_signals[3]]
-    m2_m3_signals = [microphone_signals[1], microphone_signals[2]]
-
-    # Calculate the optimal time delay for each pair using GCC-PHAT
-    optimal_time_delay_m1_m2 = gcc_phat(m1_m2_signals[0], m1_m2_signals[1], sample_rate)
-    # print(optimal_time_delay_m1_m2)
-    optimal_time_delay_m3_m4 = gcc_phat(m3_m4_signals[0], m3_m4_signals[1], sample_rate)
-    # print(optimal_time_delay_m3_m4)
-    optimal_time_delay_m1_m4 = gcc_phat(m1_m4_signals[0], m1_m4_signals[1], sample_rate)
-    # print(optimal_time_delay_m1_m4)
-    optimal_time_delay_m2_m3 = gcc_phat(m2_m3_signals[0], m2_m3_signals[1], sample_rate)
-    # print(optimal_time_delay_m2_m3)
-    # Put the optimal time delays in an array
-    optimum_time_delays = np.array([optimal_time_delay_m1_m2, optimal_time_delay_m3_m4, optimal_time_delay_m1_m4, optimal_time_delay_m2_m3])
-
-    return optimum_time_delays
+#         # Calculate the time delay between microphone pairs
+#         time_delay = gcc_phat(microphone_1_signal, microphone_2_signal, sample_rate)
+#         print("Time delay:",i, j, time_delay, "s")
+#         time_delays.append((i, j, time_delay))
 
 # Calculate distances from the source to each microphone
 distances = np.linalg.norm(microphone_positions - source_position, axis=1)
 
 # Simulate TOA for each microphone
 TOA = distances / speed_of_sound
+print(TOA)
+
 def tdoa(toas, num_microphones):
     TDoAs = []
     for i in range(num_microphones - 1):
         for j in range(i + 1, num_microphones):
-            tdoa = toas[i] - toas[j]
-            TDoAs.append(tdoa)
+            tdoa = toas[j] - toas[i]
+            print("Time difference of arrival for mic ",i,"and",j,":",tdoa, "s")
+            TDoAs.append((i,j,tdoa))
     return TDoAs
 
 tdoaMeasurements = tdoa(TOA, num_microphones=len(microphone_positions))
-
 # Calculate angles of arrival based on time delays
 pair_distances = []
-angles_of_arrival = []
 dcos_aoas = []
 
-def tdoa_aoa(tdoas, mic_positions):
-    # Calculate distance dcos(AoA) corresponding to speed_of_sound*TDoA
-    for i in range(len(tdoas)):
-        dcos_aoa = np.abs(tdoas[i])*speed_of_sound
-        dcos_aoas.append(dcos_aoa)
-    
-    # Calculate distance between microphone pairs
-    for i in range(len(mic_positions)):
-        for j in range(i+1, len(mic_positions)):
-            distance = np.linalg.norm(mic_positions[j] - mic_positions[i])
-            pair_distances.append(distance)
+# Calculate angles of arrival based on time delays
+angles_of_arrival = []
 
-    # Calculate angles of arrival
-    for i in range(len(dcos_aoas)):
-        aoa_longest = np.arccos(dcos_aoas[i]/pair_distances[i]) #Angle subtended by the longest distance to
-        # print(np.degrees(aoa_longest))
-        angles_of_arrival.append(aoa_longest)
-        # aoa_shortest = np.pi - np.pi/2 - aoa_longest
+for mic1, mic2, tdoas in tdoaMeasurements:
+    # Calculate the distance between microphone pairs
+    distance = np.linalg.norm(microphone_positions[mic1] - microphone_positions[mic2])
     
-    return angles_of_arrival
+    # Calculate the angle of arrival using the speed of sound and time delay
+    aoa = np.arccos((speed_of_sound*tdoas)/distance)
+    
+    angles_of_arrival.append(aoa)
+
+# Convert angles from radians to degrees
+angles_of_arrival_degrees = [np.degrees(angle) for angle in angles_of_arrival]
+
+# Print the estimated angles of arrival
+for i, angle_deg in enumerate(angles_of_arrival_degrees):
+    print(f"Microphone Pair {i + 1}: Angle of Arrival = {angle_deg} degrees")
+
+# def tdoa_aoa(tdoas, mic_positions):
+#     # Calculate distance dcos(AoA) corresponding to speed_of_sound*TDoA
+#     for i in range(len(tdoas)):
+#         dcos_aoa = np.abs(tdoas[i])*speed_of_sound
+#         dcos_aoas.append(dcos_aoa)
+    
+#     # Calculate distance between microphone pairs
+#     for i in range(len(mic_positions)):
+#         for j in range(i+1, len(mic_positions)):
+#             distance = np.linalg.norm(mic_positions[j] - mic_positions[i])
+#             pair_distances.append(distance)
+
+#     # Calculate angles of arrival
+#     for i in range(len(dcos_aoas)):
+#         aoa_longest = np.arccos(dcos_aoas[i]/pair_distances[i]) #Angle subtended by the longest distance to
+#         # print(np.degrees(aoa_longest))
+#         angles_of_arrival.append(aoa_longest)
+#         # aoa_shortest = np.pi - np.pi/2 - aoa_longest
+    
+#     return angles_of_arrival
 
 # print(tdoaMeasurements)
-aoa_longest_sides = tdoa_aoa(tdoaMeasurements, microphone_positions)
+# aoa_longest_sides = tdoa_aoa(tdoaMeasurements, microphone_positions)
 
-print(np.degrees(aoa_longest_sides))
+# print(np.degrees(aoa_longest_sides))
 # Function to calculate the unit vector from an angle in xy-plane
 # est_x = 0
 # est_y = 0
@@ -394,73 +354,73 @@ print(np.degrees(aoa_longest_sides))
 
 
 # Output the calculated TOAs
-print("=============Time of Arrival (TOA) at Each Microphone:==============")
-for i, toa in enumerate(TOA):
-    print(f"Microphone {i+1}: {toa:.6f} seconds")
-print("====================================================================\n")
+# print("=============Time of Arrival (TOA) at Each Microphone:==============")
+# for i, toa in enumerate(TOA):
+#     print(f"Microphone {i+1}: {toa:.6f} seconds")
+# print("====================================================================\n")
 
-# def find_source_position(aoas):
+# # def find_source_position(aoas):
 
-#     if (aoas[0] == np.pi - aoas[2]):
-        # source_x = 
+# #     if (aoas[0] == np.pi - aoas[2]):
+#         # source_x = 
 
-def triangulate_sound_source(optimum_time_delays, microphone_positions, speed_of_sound):
-    # Calculate the distances between microphone pairs
-    distance_between_m1_m2 = np.linalg.norm(microphone_positions[1] - microphone_positions[0])
-    distance_between_m3_m4 = np.linalg.norm(microphone_positions[3] - microphone_positions[2])
-    distance_between_m1_m4 = np.linalg.norm(microphone_positions[3] - microphone_positions[0])
+# def triangulate_sound_source(optimum_time_delays, microphone_positions, speed_of_sound):
+#     # Calculate the distances between microphone pairs
+#     distance_between_m1_m2 = np.linalg.norm(microphone_positions[1] - microphone_positions[0])
+#     distance_between_m3_m4 = np.linalg.norm(microphone_positions[3] - microphone_positions[2])
+#     distance_between_m1_m4 = np.linalg.norm(microphone_positions[3] - microphone_positions[0])
 
-    distance_to_source_1 = optimum_time_delays[0] * speed_of_sound
+#     distance_to_source_1 = optimum_time_delays[0] * speed_of_sound
     
-    distance_to_source_2 = optimum_time_delays[1] * speed_of_sound
+#     distance_to_source_2 = optimum_time_delays[1] * speed_of_sound
     
 
-    #Calculate distance using time of arrival
-    dist_m1 = TOA[0] * speed_of_sound
-    dist_m2 = TOA[1] * speed_of_sound
-    dist_m3 = TOA[2] * speed_of_sound
-    dist_m4 = TOA[3] * speed_of_sound
+#     #Calculate distance using time of arrival
+#     dist_m1 = TOA[0] * speed_of_sound
+#     dist_m2 = TOA[1] * speed_of_sound
+#     dist_m3 = TOA[2] * speed_of_sound
+#     dist_m4 = TOA[3] * speed_of_sound
 
-    #Calculate angle between x-axis and path followed to microphone m1
-    arrival_angle_m1_m2 = np.arccos((distance_between_m1_m2**2 + dist_m1**2-dist_m2**2)/(2*dist_m1*distance_between_m1_m2))
-    print(np.degrees(arrival_angle_m1_m2))
-    arrival_angle_m2_m1 = np.arccos((distance_between_m1_m2**2 + dist_m2**2 - dist_m1**2)/(2*distance_between_m1_m2*dist_m2))
-    arrival_angle_m1_m4 = np.pi/2 - np.arccos((distance_between_m1_m4**2 + dist_m1**2 - dist_m4**2)/(2*dist_m1*distance_between_m1_m4))
-    # arrival_angle_m2 = np.arccos(()/())
+#     #Calculate angle between x-axis and path followed to microphone m1
+#     arrival_angle_m1_m2 = np.arccos((distance_between_m1_m2**2 + dist_m1**2-dist_m2**2)/(2*dist_m1*distance_between_m1_m2))
+#     print(np.degrees(arrival_angle_m1_m2))
+#     arrival_angle_m2_m1 = np.arccos((distance_between_m1_m2**2 + dist_m2**2 - dist_m1**2)/(2*distance_between_m1_m2*dist_m2))
+#     arrival_angle_m1_m4 = np.pi/2 - np.arccos((distance_between_m1_m4**2 + dist_m1**2 - dist_m4**2)/(2*dist_m1*distance_between_m1_m4))
+#     # arrival_angle_m2 = np.arccos(()/())
 
 
-    temp = dist_m2*np.sin(arrival_angle_m2_m1)
-    sound_source_x = np.sqrt(dist_m1**2 - temp**2)
-    sound_source_y = np.arctan(sound_source_x/dist_m1)
-    sound_source_z = 0
+#     temp = dist_m2*np.sin(arrival_angle_m2_m1)
+#     sound_source_x = np.sqrt(dist_m1**2 - temp**2)
+#     sound_source_y = np.arctan(sound_source_x/dist_m1)
+#     sound_source_z = 0
 
     
-    if arrival_angle_m1_m2 > np.pi/2:
-        if dist_m1 < dist_m2:
-            sound_source_x = -sound_source_x
-            # arrival_angle_m1_m2 
+#     if arrival_angle_m1_m2 > np.pi/2:
+#         if dist_m1 < dist_m2:
+#             sound_source_x = -sound_source_x
+#             # arrival_angle_m1_m2 
     
-    if arrival_angle_m1_m2 > np.pi:
-        sound_source_y = -sound_source_y
+#     if arrival_angle_m1_m2 > np.pi:
+#         sound_source_y = -sound_source_y
 
-    if arrival_angle_m1_m4 < np.pi/2:
-        sound_source_y = sound_source_x*np.sin(arrival_angle_m1_m4)
+#     if arrival_angle_m1_m4 < np.pi/2:
+#         sound_source_y = sound_source_x*np.sin(arrival_angle_m1_m4)
 
-    # Triangulate the sound source position
-    sound_source_position = np.array([sound_source_x, sound_source_y, sound_source_z])
+#     # Triangulate the sound source position
+#     sound_source_position = np.array([sound_source_x, sound_source_y, sound_source_z])
 
-    return sound_source_position
+#     return sound_source_position
 
-# Process microphone signals to get optimal time delays
-optimum_time_delays = process_microphone_signals(microphone_signals)
-# print(optimum_time_delays)
+# # Process microphone signals to get optimal time delays
+# optimum_time_delays = process_microphone_signals(microphone_signals)
+# # print(optimum_time_delays)
 
-# Triangulate the sound source position
-estimated_sound_source_position = triangulate_sound_source(optimum_time_delays, microphone_positions, speed_of_sound)
+# # Triangulate the sound source position
+# estimated_sound_source_position = triangulate_sound_source(optimum_time_delays, microphone_positions, speed_of_sound)
 
-# # Output the estimated sound source location
-print("=========================Simulation Result==========================")
-print(f"Estimated Sound Source Location:\n X = {estimated_sound_source_position[0]:.3f} meters,\n "
-      f"Y = {estimated_sound_source_position[1]:.3f} meters,\n "
-      f"Z = {estimated_sound_source_position[2]:.3f} meters")
-print("====================================================================\n")
+# # # Output the estimated sound source location
+# print("=========================Simulation Result==========================")
+# print(f"Estimated Sound Source Location:\n X = {estimated_sound_source_position[0]:.3f} meters,\n "
+#       f"Y = {estimated_sound_source_position[1]:.3f} meters,\n "
+#       f"Z = {estimated_sound_source_position[2]:.3f} meters")
+# print("====================================================================\n")
