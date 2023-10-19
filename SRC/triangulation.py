@@ -220,12 +220,11 @@ time_delay_index = np.argmax(np.abs(gcc_phat_result))
 
 # Convert the time delay index to seconds
 time_delay = time_delay_index / fs
-print(f"Time delay Preprocessed: {time_delay}")
+
 if time_delay > 0.01:
     time_delay = time_delay/100000
 
 # Print the time delay
-print(time_delay)
 print(f"Time Delay: {time_delay} seconds")
 
 # Calculate the angle of arrival in radians
